@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import Mensaje from '../components/Mensaje';
+import Mensaje from '../components/MensajeLogin';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faKeyboard } from '@fortawesome/free-solid-svg-icons';
 import "../styles/login.css" // Archivo de estilos combinado

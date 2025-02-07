@@ -1,15 +1,17 @@
-import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faXmark, faCheck } from '@fortawesome/free-solid-svg-icons';
+import { faCheckCircle, faXmarkCircle } from '@fortawesome/free-solid-svg-icons';
+import '../styles/mensaje.css';
 
-const Mensaje = ({ tipo, children }) => {
-  const icono = tipo ? faCheck : faXmark;
-  const color = tipo ? 'text-green-500' : 'text-red-500';
+const Mensaje = ({ children, tipo }) => {
+  const mensajeClase = tipo === 'success' ? 'success' : 'error';
+  const icono = tipo === 'success' ? faCheckCircle : faXmarkCircle;
 
   return (
-    <div className={`mensaje-container flex items-center justify-center my-4`}>
-      <FontAwesomeIcon icon={icono} className={`mr-2 ${color}`} size="lg" />
-      <span>{children}</span>
+    <div className={`mensaje-container ${mensajeClase}`}>
+      <FontAwesomeIcon icon={icono} className="mensaje-icon" />
+      <div className="mensaje-text">
+        <p>{children}</p>
+      </div>
     </div>
   );
 };

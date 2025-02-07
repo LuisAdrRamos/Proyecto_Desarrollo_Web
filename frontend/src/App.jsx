@@ -26,6 +26,10 @@ import { NotFound } from "./pages/NotFound.jsx";
 import { Forgot } from "./pages/Forgot.jsx";
 import Restablecer from './pages/Restablecer.jsx';
 
+// PrivateRoute
+import { PrivateRoute } from './routes/PrivateRoutes.jsx';
+import Auth from './layout/Auth.jsx'; // Importar componente Auth
+
 const AppContent = () => {
   const location = useLocation();
   const noHeaderFooterRoutes = ['/login', '/register', '/forgot', '/recuperar-password', '/confirmar'];
@@ -37,8 +41,27 @@ const AppContent = () => {
 
   return (
     <div>
+      {/* Mostrar NavBar solo si no estamos en rutas de login, register, etc. */}
       {!shouldHideHeaderFooter && <NavBar />}
+      
       <Routes>
+        {/* Rutas públicas (login, registro, etc.) */}
+        <Route path='/login' element={<Auth />} >
+          <Route path='/login' element={<Login />} />
+        </Route>
+
+        <Route path='/register' element={<Auth />} >
+          <Route path='/register' element={<Register />} />
+        </Route>
+
+        {/* Rutas privadas que requieren autenticación */}
+        <Route path='/perfil' element={ 
+          <PrivateRoute>
+            <Perfil />
+          </PrivateRoute>
+        } />
+
+        {/* Ruta principal (página pública) */}
         <Route path="/" element={
           <div>
             <Carousel />
@@ -66,17 +89,18 @@ const AppContent = () => {
             </div>
           </div>
         } />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
+
+        {/* Otras rutas */}
         <Route path="/forgot/:id" element={<Forgot />} />
         <Route path="/confirmar/:token" element={<Confirmar />} />
-        <Route path="/perfil" element={<Perfil />} />
         <Route path="/tecladosOficina" element={<TecladosOficina />} />
         <Route path="/tecladosMecanicos" element={<TecladosMecanicos />} />
         <Route path="/tecladosCustom" element={<TecladosCustom />} />
         <Route path="/recuperar-password/:token" element={<Restablecer />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
+
+      {/* Mostrar Footer solo si no estamos en rutas de login, register, etc. */}
       {!shouldHideHeaderFooter && <Footer />}
     </div>
   );

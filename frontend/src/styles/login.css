@@ -2,7 +2,7 @@
 body, html {
   height: 100%;
   margin: 0;
-  overflow: hidden;
+  /* overflow: hidden; */
 }
 
 .brand {
@@ -45,13 +45,13 @@ body, html {
   font-size: 1.2em;
 }
 
-.register-link, .login-link, .forgot-link {
+.register-link, .login-link, .forgot-link, .confirmar-link {
   color: green;
   cursor: pointer;
   text-decoration: underline;
 }
 
-.register-link:hover, .login-link:hover, .forgot-link:hover {
+.register-link:hover, .login-link:hover, .forgot-link:hover, .confirmar-link:hover {
   color: darkgreen;
 }
 
@@ -93,25 +93,76 @@ body, html {
   backdrop-filter: blur(20px);
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
   color: black;
-  width: 520px;
-  padding: 30px 50px;
+  width: 620px;
+  padding: 40px 50px;
   border-radius: 10px;
   font-size: 1.2em;
 }
 
-.forgot-background {
-  flex: 1;
-  width: 50%;
-  height: 100vh;
-  background-image: url('/public/images/catforgot.jpg');
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
-  display: none;
+.form-control {
+  font-size: 1.2rem;
+  padding: 12px;
 }
 
-@media (min-width: 640px) {
-  .forgot-background {
-    display: block;
-  }
+.btn.btn-primary {
+  font-size: 1.2rem;
+  padding: 15px 25px;
+}
+
+/* login.css */
+
+/* Mensajes de éxito y error */
+.mensaje-success {
+  background-color: #d4edda;
+  border: 1px solid #c3e6cb;
+  padding: 10px;
+  color: #155724;
+  border-radius: 5px;
+  margin-top: 10px;
+}
+
+.mensaje-error {
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  padding: 10px;
+  color: #721c24;
+  border-radius: 5px;
+  margin-top: 10px;
+}
+
+/* Diseño del componente confirmar */
+.confirmar-circle {
+  background-color: #00e100;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  margin: 20px auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.confirmar-icon {
+  font-size: 3rem;
+  color: white;
+}
+
+.confirmar-texto-gracias {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-top: 20px;
+}
+
+.confirmar-texto-iniciar {
+  font-size: 1.2rem;
+  margin-top: 10px;
+  color: #555555;
+}
+
+.confirmar-link {
+  font-size: 1.2rem;
+  text-decoration: underline;
+  display: block;
+  margin: 0 auto;
+  width: fit-content;
 }

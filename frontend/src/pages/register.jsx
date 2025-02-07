@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import Mensaje from '../components/Mensaje';
+import Mensaje from '../components/MensajeLogin';
 import '../styles/login.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -15,7 +15,7 @@ const Register = () => {
     password: ""
   });
 
-  const [mensaje, setMensaje] = useState({});
+  const [mensaje, setMensaje] = useState({ respuesta: '', tipo: '' });
 
   const navigate = useNavigate();
 
@@ -33,26 +33,27 @@ const Register = () => {
       const respuesta = await axios.post(url, form);
 
       if (respuesta && respuesta.data) {
-        setMensaje({ respuesta: respuesta.data.msg, tipo: true });
+        setMensaje({ respuesta: respuesta.data.msg, tipo: 'success' });
+        setTimeout(() => {
+          setMensaje({ respuesta: '', tipo: '' });
+          navigate('/login');
+        }, 5000);
         setForm({
           nombre: "",
           apellido: "",
           email: "",
           password: ""
         });
-        navigate('/login'); // Redirige al login después del registro exitoso
       } else {
-        throw new Error('Respuesta inesperada del servidor');
+        setMensaje({ respuesta: 'Algo salió mal', tipo: 'error' });
       }
+
     } catch (error) {
       const errorMsg = error.response && error.response.data ? error.response.data.msg : 'Error al registrar';
-      setMensaje({ respuesta: errorMsg, tipo: false });
-      console.error('Error:', error.message, 'Tipo:', false);
-      if (error.response) {
-        console.error('Datos del error:', error.response.data);
-      }
+      setMensaje({ respuesta: errorMsg, tipo: 'error' });
     }
   };
+
 
   return (
     <div className='login-body'>
@@ -116,10 +117,11 @@ const Register = () => {
           </p>
         </form>
         {mensaje.respuesta && (
-          <Mensaje tipo={mensaje.tipo ? 'success' : 'error'}>
+          <Mensaje tipo={mensaje.tipo}>
             {mensaje.respuesta}
           </Mensaje>
         )}
+
       </div>
     </div>
   );

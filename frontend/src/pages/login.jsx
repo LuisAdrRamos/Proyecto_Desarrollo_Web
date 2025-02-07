@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import Mensaje from '../components/Mensaje';
+import Mensaje from '../components/MensajeLogin';
 import '../styles/login.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -96,7 +96,7 @@ const Login = () => {
           <button type="submit" className="btn btn-primary">Iniciar Sesión</button>
           <p className="text-center mt-3">
             ¿No tienes una cuenta?{' '}
-            <Link to="/register" className="login-link">Regístrate</Link>
+            <Link to="/register" className="register-link">Regístrate</Link>
           </p>
         </form>
         {mensaje.respuesta && (
@@ -106,6 +106,7 @@ const Login = () => {
         )}
       </div>
     </div>
+
   );
 };
 
