@@ -1,110 +1,183 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import AuthContext from "../context/AuthProvider";
+import "../styles/Perfil.css";
 
 const Perfil = () => {
   const navigate = useNavigate();
-  const [userData, setUserData] = useState(null);
+  const { auth, obtenerPerfilAdmin, actualizarPerfilAdmin, actualizarPassword } =
+    useContext(AuthContext);
+  const [form, setForm] = useState({ passwordactual: "", password: "", confirmpassword: "" });
+  const [mensaje, setMensaje] = useState("");
+  const [updatedNombre, setUpdatedNombre] = useState("");
+  const [updatedApellido, setUpdatedApellido] = useState("");
 
-  // Obtener los datos del usuario desde el localStorage
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
     if (!token) {
-      navigate('/'); // Si no está autenticado, redirigir a la página principal
+      navigate("/");
     } else {
-      const user = JSON.parse(localStorage.getItem('userData')) || {}; // Obtener los datos del usuario desde el localStorage
-      setUserData(user);
+      obtenerPerfilAdmin(token)
+        .then((data) => {
+          setUpdatedNombre(data.nombre);
+          setUpdatedApellido(data.apellido);
+        })
+        .catch(() => {
+          setMensaje("Error al cargar el perfil del administrador.");
+        });
     }
   }, [navigate]);
 
   const handleLogout = () => {
-    // Eliminar el token y los datos del usuario del almacenamiento local
-    localStorage.removeItem('token');
-    localStorage.removeItem('userData');
-    // Redirigir a la página principal después de cerrar sesión
-    navigate('/');
-  };  
+    localStorage.removeItem("token");
+    localStorage.removeItem("userData");
+    navigate("/");
+  };
+
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleProfileUpdate = async (e) => {
+    e.preventDefault();
+    if (!updatedNombre.trim() || !updatedApellido.trim()) {
+      setMensaje("El nombre y apellido no pueden estar vacíos.");
+      return;
+    }
+    try {
+      await actualizarPerfilAdmin(auth._id, {
+        nombre: updatedNombre,
+        apellido: updatedApellido,
+      });
+      setMensaje("Perfil actualizado con éxito.");
+    } catch (error) {
+      setMensaje("Error al actualizar el perfil.");
+      console.error(error);
+    }
+  };
+
+  const handleSubmitPassword = async (e) => {
+    e.preventDefault();
+    if (!form.passwordactual || !form.password || !form.confirmpassword) {
+      setMensaje("Todos los campos de contraseña son obligatorios.");
+      return;
+    }
+    if (form.password !== form.confirmpassword) {
+      setMensaje("Las contraseñas no coinciden.");
+      return;
+    }
+
+    try {
+      const resultado = await actualizarPassword({
+        passwordactual: form.passwordactual,
+        passwordnuevo: form.password,
+      });
+      setMensaje(resultado.msg);
+      setForm({ passwordactual: "", password: "", confirmpassword: "" });
+    } catch (error) {
+      setMensaje(error.response?.data?.msg || "Error al actualizar la contraseña.");
+    }
+  };
 
   return (
-    <div className='container-fluid vw-100 vh-100'>
-      <div className='col-md-8 col-lg-6 mx-auto'>
-        <div className='card-profile'>
-          <div className='card-header bg-custom text-black'>
-            <h4 className='mb-0'>Perfil de Usuario</h4>
+    <div className='profile-container'>
+      <div className='profile-wrapper'>
+        <h4 className='mb-4 text-center'>Perfil de Usuario</h4>
+        {mensaje && (
+          <div className={`alert ${mensaje.includes("Error") ? "alert-danger" : "alert-success"}`}>
+            {mensaje}
           </div>
-          <div className='card-body'>
-            {/* Mostrar los datos del usuario en una tabla */}
-            {userData ? (
-              <table className='table'>
-                <thead>
-                  <tr>
-                    <th>ID de Usuario</th>
-                    <th>Correo Electrónico</th>
-                    <th>Nombre de Usuario</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>{userData.userId}</td>
-                    <td>{userData.email}</td>
-                    <td>{userData.username}</td>
-                  </tr>
-                </tbody>
-              </table>
-            ) : (
-              <p>Cargando...</p>
-            )}
+        )}
+        {auth ? (
+          <table className='profile-table'>
+            <thead>
+              <tr>
+                <th>ID de Usuario</th>
+                <th>Correo Electrónico</th>
+                <th>Nombre</th>
+                <th>Apellido</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>{auth._id}</td>
+                <td>{auth.email}</td>
+                <td>{auth.nombre}</td>
+                <td>{auth.apellido}</td>
+              </tr>
+            </tbody>
+          </table>
+        ) : (
+          <p>Cargando...</p>
+        )}
 
-            {/* Formulario de actualización de datos */}
-            <form>
-              <div className='mb-3'>
-                <label htmlFor='userId' className='form-label'>ID de Usuario</label>
-                <input
-                  type='text'
-                  name='userId'
-                  id='userId'
-                  className='form-control'
-                  value={userData?.userId || ''}
-                  disabled
-                />
-              </div>
-              <div className='mb-3'>
-                <label htmlFor='correo' className='form-label'>Correo Electrónico</label>
-                <input
-                  type='email'
-                  name='correo'
-                  id='correo'
-                  className='form-control'
-                  value={userData?.email || ''}
-                  disabled
-                />
-              </div>
-              <div className='mb-3'>
-                <label htmlFor='user' className='form-label'>Nombre de Usuario</label>
-                <input
-                  type='text'
-                  name='user'
-                  id='user'
-                  className='form-control'
-                  value={userData?.username || ''}
-                  disabled
-                />
-              </div>
-              <div className='mb-3'>
-                <label htmlFor='contraseña' className='form-label'>Contraseña</label>
-                <input
-                  type='password'
-                  name='contraseña'
-                  id='contraseña'
-                  className='form-control'
-                />
-              </div>
-              <div className='d-flex justify-content-between'>
-                <button type='submit' className='btn btn-success'>Actualizar Datos</button>
-                {/* Cambio de botón a Cerrar sesión */}
-                <button type='button' className='btn btn-danger' onClick={handleLogout}>Cerrar Sesión</button>
-              </div>
-            </form>
+        <form onSubmit={handleProfileUpdate}>
+          <div className='mb-3'>
+            <label className='form-label'>Nuevo Nombre</label>
+            <input
+              type='text'
+              className='profile-input'
+              value={updatedNombre}
+              onChange={(e) => setUpdatedNombre(e.target.value)}
+            />
           </div>
+          <div className='mb-3'>
+            <label className='form-label'>Nuevo Apellido</label>
+            <input
+              type='text'
+              className='profile-input'
+              value={updatedApellido}
+              onChange={(e) => setUpdatedApellido(e.target.value)}
+            />
+          </div>
+          <button type='submit' className='btn btn-success profile-button'>
+            Actualizar Perfil
+          </button>
+        </form>
+
+        <form onSubmit={handleSubmitPassword}>
+          <div className='mb-3'>
+            <label className='form-label'>Contraseña Actual</label>
+            <input
+              type='password'
+              placeholder='Ingrese su contraseña actual'
+              className='profile-input'
+              name='passwordactual'
+              value={form.passwordactual}
+              onChange={handleChange}
+            />
+          </div>
+          <div className='mb-3'>
+            <label className='form-label'>Nueva Contraseña</label>
+            <input
+              type='password'
+              placeholder='Ingrese su nueva contraseña'
+              className='profile-input'
+              name='password'
+              value={form.password}
+              onChange={handleChange}
+            />
+          </div>
+          <div className='mb-3'>
+            <label className='form-label'>Confirmar Contraseña</label>
+            <input
+              type='password'
+              placeholder='Repita su nueva contraseña'
+              className='profile-input'
+              name='confirmpassword'
+              value={form.confirmpassword}
+              onChange={handleChange}
+            />
+          </div>
+          <button type='submit' className='btn btn-primary profile-button'>
+            Actualizar Contraseña
+          </button>
+        </form>
+
+        <div className='d-flex justify-content-between mt-3'>
+          <button type='button' className='btn btn-danger profile-button' onClick={handleLogout}>
+            Cerrar Sesión
+          </button>
         </div>
       </div>
     </div>

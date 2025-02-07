@@ -1,20 +1,11 @@
-// Estilos
 import './styles/App.css';
-
-// Librerías
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
-
-// Contexto
 import { AuthProvider } from './context/AuthProvider';
-
-// Componentes
 import NavBar from './components/navbar.jsx';
 import Carousel from './components/carousel.jsx';
 import Card from './components/cards.jsx';
 import Footer from './components/footer.jsx';
-
-// Páginas
 import Perfil from './pages/perfil.jsx';
 import Login from './pages/login.jsx';
 import Register from './pages/register.jsx';
@@ -25,10 +16,10 @@ import { Confirmar } from "./pages/Confirmar.jsx";
 import { NotFound } from "./pages/NotFound.jsx";
 import { Forgot } from "./pages/Forgot.jsx";
 import Restablecer from './pages/Restablecer.jsx';
-
-// PrivateRoute
 import { PrivateRoute } from './routes/PrivateRoutes.jsx';
-import Auth from './layout/Auth.jsx'; // Importar componente Auth
+import Auth from './layout/Auth.jsx'; 
+
+// Importar las páginas para las nuevas rutas
 
 const AppContent = () => {
   const location = useLocation();
@@ -109,7 +100,6 @@ const AppContent = () => {
 const AppWrapper = () => {
   return (
     <Router>
-      {/* Aquí se envuelve el contenido con AuthProvider */}
       <AuthProvider>
         <AppContent />
       </AuthProvider>
