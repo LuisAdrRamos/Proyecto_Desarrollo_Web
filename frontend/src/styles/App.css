@@ -1,367 +1,439 @@
 html {
-    height: 100%;
-    width: 100%;
-    font-family: Arial, Helvetica, sans-serif;
-    color: black;
+  height: 100%;
+  width: 100%;
+  font-family: Arial, Helvetica, sans-serif;
+  color: black;
 }
 
 body {
-    background: rgb(255, 255, 255);
-    background-attachment: fixed; /* Mantener el fondo estático */
-    background-size: cover;
-    background-repeat: repeat;
-    background-position: center;
-    color: black;
+  background: rgb(255, 255, 255);
+  background-attachment: fixed; /* Mantener el fondo estático */
+  background-size: cover;
+  background-repeat: repeat;
+  background-position: center;
+  color: black;
 }
 
 /* NAVBAR */
 nav {
-    margin: 0 20px; /* Margen lateral */
-    border-radius: 15px;
-    margin: 15px;
-    position: fixed;
-    top: 0;
-    z-index: 1000;
+  margin: 0 20px; /* Margen lateral */
+  border-radius: 15px;
+  margin: 15px;
+  position: fixed;
+  top: 0;
+  z-index: 1000;
 }
 
 /* Estilo general para los enlaces de la barra de navegación */
 .navbar .nav-link {
-    font-weight: bold;
-    font-size: 1rem;
-    display: flex;
-    align-items: center;
-    margin-right: 50px;
-    text-decoration: none; /* Sin subrayados */
-    color: inherit; /* Hereda el color del tema */
-    transition: color 0.5s ease; /* Transición suave para el color */
+  font-weight: bold;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  margin-right: 50px;
+  text-decoration: none; /* Sin subrayados */
+  color: inherit; /* Hereda el color del tema */
+  transition: color 0.5s ease; /* Transición suave para el color */
 }
 
 .navbar .nav-link:hover {
-    color: rgb(2, 197, 2); /* Cambia el color al pasar el mouse */
+  color: rgb(2, 197, 2); /* Cambia el color al pasar el mouse */
 }
 
 /* Estilo para la marca (logo y texto) */
 .navbar .navbar-brand {
-    font-weight: bold;
-    font-size: 1.5rem;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px; /* Espaciado entre ícono y texto */
-    margin-right: 100px;
-    text-decoration: none;
-    color: inherit;
-    transition: color 0.3s ease, transform 0.3s ease; /* Transiciones para color y escala */
+  font-weight: bold;
+  font-size: 1.5rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px; /* Espaciado entre ícono y texto */
+  margin-right: 100px;
+  text-decoration: none;
+  color: inherit;
+  transition: color 0.3s ease, transform 0.3s ease; /* Transiciones para color y escala */
 }
 
 .navbar .navbar-brand:hover {
-    color: rgb(2, 197, 2); /* Cambia el color al pasar el mouse */
-    transform: scale(1.05); /* Aumenta ligeramente el tamaño */
+  color: rgb(2, 197, 2); /* Cambia el color al pasar el mouse */
+  transform: scale(1.05); /* Aumenta ligeramente el tamaño */
 }
 
 .navbar .navbar-icon {
-    transition: transform 0.2s ease-in-out;
-    transition: color 0.15s ease;
+  transition: transform 0.2s ease-in-out;
+  transition: color 0.15s ease;
 }
 
 .navbar .navbar-icon:hover {
-    transform: scale(1.3);
-    cursor: pointer;
-    color: rgb(2, 197, 2);
+  transform: scale(1.3);
+  cursor: pointer;
+  color: rgb(2, 197, 2);
 }
 
 .icon {
-    font-size: 2rem;
+  font-size: 2rem;
 }
 
-.icons .profile, .icons .cart, .icons .login, .icons .register {
-    padding: 15px;
-    color: black;
-    font-size: 1.25rem;
+.icons .profile,
+.icons .cart,
+.icons .login,
+.icons .register {
+  padding: 15px;
+  color: black;
+  font-size: 1.25rem;
 }
 
 /* Contenedor de ícono y texto de la marca */
 .navbar-brand-content {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-left: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: 10px;
 }
 
 /* Adaptación para pantallas pequeñas */
 @media (max-width: 768px) {
-    .navbar .nav-link {
-        margin-right: 20px; /* Reduce el espacio en pantallas pequeñas */
-    }
+  .navbar .nav-link {
+    margin-right: 20px; /* Reduce el espacio en pantallas pequeñas */
+  }
 
-    .navbar .navbar-brand {
-        font-size: 1.2rem; /* Ajusta el tamaño de la fuente */
-        margin-right: 50px; /* Reduce el margen */
-    }
+  .navbar .navbar-brand {
+    font-size: 1.2rem; /* Ajusta el tamaño de la fuente */
+    margin-right: 50px; /* Reduce el margen */
+  }
 
-    .navbar .icons .icon {
-        font-size: 1rem; /* Reduce el tamaño de los íconos */
-        padding: 10px;
-    }
+  .navbar .icons .icon {
+    font-size: 1rem; /* Reduce el tamaño de los íconos */
+    padding: 10px;
+  }
 }
 
 /* Carrusel */
 .carousel {
-    padding-top: 10px;
-    width: 90%;
-    margin: 0 auto;
-    border-radius: 15px; /* Esquinas redondeadas */
-    overflow: hidden;
-    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Transiciones suaves */
+  padding-top: 10px;
+  width: 90%;
+  margin: 0 auto;
+  border-radius: 15px; /* Esquinas redondeadas */
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Transiciones suaves */
 }
 
 .carousel img {
-    height: 400px;
-    width: 100%;
-    object-fit: cover;
-    margin-bottom: 25px;
-    border-radius: 15px; /* Esquinas redondeadas para imágenes */
+  height: 400px;
+  width: 100%;
+  object-fit: cover;
+  margin-bottom: 25px;
+  border-radius: 15px; /* Esquinas redondeadas para imágenes */
 }
 
 .carousel:hover {
-    transform: scale(1.05); /* Agrandar carrusel */
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Agregar sombra */
+  transform: scale(1.01); /* Agrandar carrusel */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Agregar sombra */
 }
 
-/* Tarjetas menu principal */
+/* Tarjetas del menú principal */
 .card {
-    padding: 5px;
-    margin: 15px;
-    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Transiciones suaves */
-    border-radius: 8px; /* Opcional, para esquinas redondeadas */
+  padding: 5px; /* Margen interior de la tarjeta */
+  margin: 15px; /* Espaciado entre tarjetas */
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Efecto de transición */
+  border-radius: 8px; /* Bordes redondeados de la tarjeta */
 }
 
 .card:hover {
-    transform: scale(1.05); /* Agrandar tarjeta */
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Agregar sombra */
+  transform: scale(1.01); /* Aumentar tamaño al pasar el cursor */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Sombra al pasar el cursor */
 }
 
 .card img {
-    height: 100%;
-    width: 100%;
-    object-fit: cover;
-    border-radius: 8px 8px 0 0; /* Opcional, para mantener consistencia en las esquinas */
+  height: 100%; /* Altura de la imagen */
+  width: 100%; /* Ancho de la imagen */
+  object-fit: cover; /* Ajuste de la imagen dentro de su contenedor */
+  border-radius: 8px 8px 0 0; /* Bordes redondeados superiores */
 }
 
-.container {
-    width: 90%;
-    margin: 0 auto;
+.card-footer {
+  display: flex;
+  flex-direction: column; /* Alineación vertical */
+  gap: 1px; /* Espaciado entre filas */
+}
+
+.top-buttons {
+  display: flex; /* Alinear botones en la misma fila */
+  justify-content: space-between; /* Separar botones */
+  align-items: center; /* Alinear verticalmente los botones */
+}
+
+.effect-button {
+  transition: transform 0.2s ease, background-color 0.2s ease; /* Efecto al pasar el cursor */
+}
+
+/* Ajustes de tamaño de los botones */
+.effect-button {
+  height: 50px; /* Cambiar la altura del botón */
+  width: 120px; /* Cambiar el ancho del botón */
+  padding: 10px; /* Ajustar el relleno interno */
+  display: flex;
+  justify-content: center; /* Centrar texto/icono horizontalmente */
+  align-items: center; /* Centrar texto/icono verticalmente */
+  text-align: center;
+  margin: 0;
+}
+
+.effect-button:hover {
+  transform: scale(1.1); /* Ampliar el botón al pasar el cursor */
+  background-color: #d1e7dd; /* Cambiar color al pasar el cursor */
+}
+
+/* Botón "Añadir al VS" y "Ver detalles" */
+.btn-primary {
+  background-color: #4caf50; /* Color verde */
+  border: none; /* Sin borde */
+  color: white; /* Texto blanco */
+}
+
+.btn-info {
+  background-color: #2196f3; /* Color azul */
+  border: none; /* Sin borde */
+  color: white; /* Texto blanco */
+}
+
+.admin-buttons {
+  display: flex;
 }
 
 /* Footer */
 .footer {
-    background-color: #f8f9fa;
-    padding: 20px 0;
-    text-align: center;
-    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
-    margin-top: 50px; /* Crear espacio entre el contenedor y el footer */
+  background-color: #f8f9fa;
+  padding: 20px 0;
+  text-align: center;
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+  margin-top: 50px; /* Crear espacio entre el contenedor y el footer */
 }
 
 .footer-content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
 }
 
 .footer-text {
-    color: #555;
-    font-size: 18px;
-    margin: 0;
+  color: #555;
+  font-size: 18px;
+  margin: 0;
 }
 
 .footer-icons {
-    display: flex;
-    justify-content: center;
-    gap: 50px;
+  display: flex;
+  justify-content: center;
+  gap: 50px;
 }
 
 .footer-icon {
-    max-width: 40px;
-    transition: transform 0.2s ease-in-out;
+  max-width: 40px;
+  transition: transform 0.2s ease-in-out;
 }
 
 .footer-icon:hover {
-    transform: scale(1.2);
-    cursor: pointer;
+  transform: scale(1.2);
+  cursor: pointer;
 }
 
 /* Contenedor principal del perfil */
 .profile-container {
-    display: flex;
-    justify-content: center;
-    align-items: flex-start; /* Alinear al inicio para que quede debajo del nav */
-    padding-top: 80px; /* Espacio para el nav */
-    width: 100%;
-    min-height: calc(100vh - 80px - 60px); /* Ajustar altura para crear espacio */
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* Alinear al inicio para que quede debajo del nav */
+  padding-top: 80px; /* Espacio para el nav */
+  width: 100%;
+  min-height: calc(100vh - 80px - 60px); /* Ajustar altura para crear espacio */
 }
 
 /* Contenedor del perfil */
 .profile-wrapper {
-    background: transparent;
-    border: 2px solid rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(20px); /* Efecto borroso */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-    color: black;
-    width: 90%; /* Extender horizontalmente */
-    max-width: 1200px; /* Ancho máximo más grande */
-    padding: 40px 50px;
-    border-radius: 10px;
-    background-color: rgba(255, 255, 255, 0.3); /* Fondo semitransparente */
-    font-size: 1.2em;
-    margin-bottom: 50px; /* Crear espacio entre el contenedor y el footer */
+  background: transparent;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(20px); /* Efecto borroso */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  color: black;
+  width: 90%; /* Extender horizontalmente */
+  max-width: 1200px; /* Ancho máximo más grande */
+  padding: 40px 50px;
+  border-radius: 10px;
+  background-color: rgba(255, 255, 255, 0.3); /* Fondo semitransparente */
+  font-size: 1.2em;
+  margin-bottom: 50px; /* Crear espacio entre el contenedor y el footer */
 }
 
 /* Título del perfil */
 .profile-wrapper h4 {
-    text-align: center;
-    margin-bottom: 20px;
-    font-size: 1.5em;
-    font-weight: bold;
-    color: #000000;
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 1.5em;
+  font-weight: bold;
+  color: #000000;
 }
 
 /* Tabla de información del usuario */
 .profile-table {
-    width: 100%;
-    margin-bottom: 20px;
-    border-collapse: collapse;
+  width: 100%;
+  margin-bottom: 20px;
+  border-collapse: collapse;
 }
 
 .profile-table th,
 .profile-table td {
-    padding: 12px;
-    text-align: left;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .profile-table th {
-    background-color: rgba(0, 0, 0, 0.05);
-    font-weight: bold;
+  background-color: rgba(0, 0, 0, 0.05);
+  font-weight: bold;
 }
 
 /* Formularios */
 .profile-wrapper form {
-    margin-bottom: 20px;
+  margin-bottom: 20px;
 }
 
 .profile-wrapper .form-label {
-    font-size: 1.1em;
-    font-weight: bold;
-    margin-bottom: 8px;
-    display: block;
-    color: #000000;
+  font-size: 1.1em;
+  font-weight: bold;
+  margin-bottom: 8px;
+  display: block;
+  color: #000000;
 }
 
 .profile-input {
-    background: rgba(255, 255, 255, 0.9);
-    border: 1px solid rgba(0, 0, 0, 0.2);
-    border-radius: 8px;
-    padding: 12px;
-    width: 100%;
-    color: #000000;
-    margin-bottom: 15px;
-    font-size: 1em;
-    transition: border-color 0.3s ease;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  padding: 12px;
+  width: 100%;
+  color: #000000;
+  margin-bottom: 15px;
+  font-size: 1em;
+  transition: border-color 0.3s ease;
 }
 
 .profile-input:focus {
-    border-color: #00e100;
-    outline: none;
+  border-color: #00e100;
+  outline: none;
 }
 
 .profile-input::placeholder {
-    color: rgba(0, 0, 0, 0.5);
+  color: rgba(0, 0, 0, 0.5);
 }
 
 .profile-button {
-    width: 100%;
-    margin-top: 10px;
-    padding: 12px;
-    font-size: 1.1em;
-    font-weight: bold;
-    border-radius: 8px;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+  width: 100%;
+  margin-top: 10px;
+  padding: 12px;
+  font-size: 1.1em;
+  font-weight: bold;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 .btn-success {
-    background-color: #00e100;
-    color: #000000;
+  background-color: #00e100;
+  color: #000000;
 }
 
 .btn-success:hover {
-    background-color: #a1ffa1;
+  background-color: #a1ffa1;
 }
 
 .btn-primary {
-    background-color: #00e100;
-    color: #000000;
+  background-color: #00e100;
+  color: #000000;
 }
 
 .btn-primary:hover {
-    background-color: #a1ffa1;
+  background-color: #a1ffa1;
 }
 
 .btn-danger {
-    background-color: #ff4d4d;
-    color: #000000;
+  background-color: #ff4d4d;
+  color: #000000;
 }
 
 .btn-danger:hover {
-    background-color: #ff8080;
+  background-color: #ff8080;
 }
 
 /* Mensajes de éxito y error */
 .alert {
-    padding: 12px;
-    border-radius: 8px;
-    margin-bottom: 20px;
-    font-size: 1em;
-    text-align: center;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-size: 1em;
+  text-align: center;
 }
 
 .alert-success {
-    background-color: #d4edda;
-    border: 1px solid #c3e6cb;
-    color: #155724;
+  background-color: #d4edda;
+  border: 1px solid #c3e6cb;
+  color: #155724;
 }
 
 .alert-danger {
-    background-color: #f8d7da;
-    border: 1px solid #f5c6cb;
-    color: #721c24;
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  color: #721c24;
 }
 
 /* Botón de cerrar sesión */
 .d-flex.justify-content-between {
-    margin-top: 20px;
+  margin-top: 20px;
 }
 
 /* Estilos responsivos */
 @media (max-width: 768px) {
-    .profile-wrapper {
-        padding: 20px;
-        font-size: 1em;
-    }
+  .profile-wrapper {
+    padding: 20px;
+    font-size: 1em;
+  }
 
-    .profile-table th,
-    .profile-table td {
-        padding: 8px;
-    }
+  .profile-table th,
+  .profile-table td {
+    padding: 8px;
+  }
 
-    .profile-input {
-        padding: 10px;
-        font-size: 0.9em;
-    }
+  .profile-input {
+    padding: 10px;
+    font-size: 0.9em;
+  }
 
-    .profile-button {
-        padding: 10px;
-        font-size: 1em;
-    }
+  .profile-button {
+    padding: 10px;
+    font-size: 1em;
+  }
+}
+
+.input {
+  border: 2px solid #ccc;
+  width: 100%;
+  padding: 8px;
+  margin-top: 8px;
+  margin-bottom: 16px;
+  border-radius: 4px;
+}
+
+.btn {
+  background-color: #4a5568;
+  color: #e2e8f0;
+  padding: 12px;
+  text-transform: uppercase;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.btn:hover {
+  background-color: #2d3748;
 }

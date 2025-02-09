@@ -1,23 +1,23 @@
-import {Link} from 'react-router-dom'
-
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faLinkSlash } from '@fortawesome/free-solid-svg-icons';
+import '../styles/NotFound.css'; // Importa los estilos CSS
 
 export const NotFound = () => {
     return (
-        
-
-        <div className="flex flex-col items-center justify-center">
-
-            <img className="object-cover h-80 w-80 rounded-full border-4 border-solid border-slate-600" alt="image description"/>
-
-            <div className="flex flex-col items-center justify-center">
-                
-                <p className="text-3xl md:text-4xl lg:text-5xl text-gray-800 mt-12">Page Not Found</p>
-                
-                <p className="md:text-lg lg:text-xl text-gray-600 mt-8">Sorry, the page you are looking for could not be found.</p>
-                
-                <Link to="/login" className="p-3 m-5 w-full text-center  bg-gray-600 text-slate-300  border rounded-xl hover:scale-110 duration-300 hover:bg-gray-900 hover:text-white">Login</Link>
-
+        <div className="not-found-container">
+            <div className="not-found-icon-wrapper">
+                <FontAwesomeIcon icon={faLinkSlash} className="not-found-icon" />
+            </div>
+            <div className="not-found-content-wrapper">
+                <div className="not-found-content">
+                    <p className="not-found-title">Page Not Found</p>
+                    <p className="not-found-text">Sorry, the page you are looking for could not be found.</p>
+                </div>
             </div>
         </div>
-    )
-}
+    );
+};
+
+export default NotFound;

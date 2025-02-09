@@ -50,6 +50,10 @@ const Perfil = () => {
         apellido: updatedApellido,
       });
       setMensaje("Perfil actualizado con éxito.");
+      setTimeout(() => {
+        navigate("/perfil"); // Redirigir a la página de inicio después de 3 segundos
+        navigate(0)
+      }, 1000);
     } catch (error) {
       setMensaje("Error al actualizar el perfil.");
       console.error(error);
@@ -82,7 +86,7 @@ const Perfil = () => {
   return (
     <div className='profile-container'>
       <div className='profile-wrapper'>
-        <h4 className='mb-4 text-center'>Perfil de Usuario</h4>
+        <h4 className='mb-4 text-center'>Perfil de Administrador</h4>
         {mensaje && (
           <div className={`alert ${mensaje.includes("Error") ? "alert-danger" : "alert-success"}`}>
             {mensaje}

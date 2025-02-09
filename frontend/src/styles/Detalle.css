@@ -1,0 +1,157 @@
+/* Estilo para el contenedor principal */
+.detalle-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px;
+    background: linear-gradient(to bottom, #ffffff, #f3f3f3);
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 1200px;
+    margin: 20px auto;
+    background: transparent;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(20px); /* Efecto borroso */
+    color: black;
+    width: 90%; /* Extender horizontalmente */
+    max-width: 1200px; /* Ancho máximo más grande */
+    padding: 40px 50px;
+    font-size: 1.2em;
+  }
+  
+  .detalle-header {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+  }
+  
+  .detalle-header h1 {
+    font-size: 2.5rem;
+    font-weight: bold;
+  }
+  
+  .detalle-header hr {
+    margin: 16px 0;
+    border-color: #ddd;
+  }
+  
+  /* Contenedor de detalles */
+  .detalle-content {
+    display: flex;
+    justify-content: space-between;
+    gap: 30px;
+    width: 100%;
+  }
+  
+  .detalle-info {
+    flex: 1;
+  }
+  
+  .detalle-info p {
+    font-size: 1.1rem;
+    color: #333;
+    margin-bottom: 8px;
+  }
+  
+  .detalle-info span {
+    font-weight: bold;
+    color: #555;
+    text-transform: uppercase;
+  }
+  
+  /* Estilo para la imagen */
+  .detalle-imagen {
+    max-width: 350px;
+    max-height: 350px;
+  }
+  
+  .detalle-imagen img {
+    width: 100%;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Estilo del mensaje de error */
+  .mensaje-error {
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    color: #721c24;
+    padding: 12px;
+    border-radius: 8px;
+    text-align: center;
+    width: 100%;
+    margin-top: 20px;
+  }
+  
+  /* Estilo del precio */
+  .detalle-precio {
+    color: #007b00;
+    font-size: 1.3rem;
+    font-weight: bold;
+  }
+  
+  /* Estilo para los botones */
+  .detalle-buttons {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column; /* Alineación vertical */
+    gap: 1px; /* Espaciado entre filas */
+  }
+  
+  .top-buttons {
+    display: flex; /* Alinear botones en la misma fila */
+    justify-content: space-between; /* Separar botones */
+    align-items: center; /* Alinear verticalmente los botones */
+  }
+  
+  .effect-button {
+    transition: transform 0.2s ease, background-color 0.2s ease; /* Efecto al pasar el cursor */
+  }
+  
+  /* Ajustes de tamaño de los botones */
+  .effect-button {
+    height: 50px; /* Cambiar la altura del botón */
+    width: 120px; /* Cambiar el ancho del botón */
+    padding: 10px; /* Ajustar el relleno interno */
+    display: flex;
+    justify-content: center; /* Centrar texto/icono horizontalmente */
+    align-items: center; /* Centrar texto/icono verticalmente */
+    text-align: center;
+    margin: 0;
+  }
+  
+  .effect-button:hover {
+    transform: scale(1.1); /* Ampliar el botón al pasar el cursor */
+    background-color: #d1e7dd; /* Cambiar color al pasar el cursor */
+  }
+  
+  /* Botón "Añadir al VS" y "Ver detalles" */
+  .btn-primary {
+    background-color: #4caf50; /* Color verde */
+    border: none; /* Sin borde */
+    color: white; /* Texto blanco */
+  }
+  
+  .btn-info {
+    background-color: #2196f3; /* Color azul */
+    border: none; /* Sin borde */
+    color: white; /* Texto blanco */
+  }
+  
+  .admin-buttons {
+    display: flex;
+    gap: 10px; /* Espaciado entre botones */
+  }
+  
+  /* Responsividad */
+  @media (max-width: 768px) {
+    .detalle-content {
+      flex-direction: column;
+      align-items: center;
+    }
+  
+    .detalle-imagen {
+      max-width: 100%;
+    }
+  }
+  

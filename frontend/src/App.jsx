@@ -1,11 +1,17 @@
-import './styles/App.css';
+import './styles/App.css'; // Estilos
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
 import { AuthProvider } from './context/AuthProvider';
+import { PerifericosProvider } from "./context/PerifericosProvider.jsx";
+
+// Componentes
 import NavBar from './components/navbar.jsx';
 import Carousel from './components/carousel.jsx';
 import Card from './components/cards.jsx';
 import Footer from './components/footer.jsx';
+import ErrorBoundary from "./components/ErrorBoundary.jsx";
+
+// Páginas
 import Perfil from './pages/perfil.jsx';
 import Login from './pages/login.jsx';
 import Register from './pages/register.jsx';
@@ -16,10 +22,13 @@ import { Confirmar } from "./pages/Confirmar.jsx";
 import { NotFound } from "./pages/NotFound.jsx";
 import { Forgot } from "./pages/Forgot.jsx";
 import Restablecer from './pages/Restablecer.jsx';
-import { PrivateRoute } from './routes/PrivateRoutes.jsx';
-import Auth from './layout/Auth.jsx'; 
+import Crear from './pages/Crear.jsx'; // Importar el componente Crear
+import Detalle from "./pages/Detalle.jsx";
+import ActualizarTeclado from "./pages/ActualizarTeclado.jsx";
 
-// Importar las páginas para las nuevas rutas
+// Rutas privadas y layout
+import { PrivateRoute } from './routes/PrivateRoutes.jsx';
+import Auth from './layout/Auth.jsx';
 
 const AppContent = () => {
   const location = useLocation();
@@ -34,7 +43,7 @@ const AppContent = () => {
     <div>
       {/* Mostrar NavBar solo si no estamos en rutas de login, register, etc. */}
       {!shouldHideHeaderFooter && <NavBar />}
-      
+
       <Routes>
         {/* Rutas públicas (login, registro, etc.) */}
         <Route path='/login' element={<Auth />} >
@@ -46,9 +55,15 @@ const AppContent = () => {
         </Route>
 
         {/* Rutas privadas que requieren autenticación */}
-        <Route path='/perfil' element={ 
+        <Route path='/perfil' element={
           <PrivateRoute>
             <Perfil />
+          </PrivateRoute>
+        } />
+
+        <Route path='/actualizar/:id' element={
+          <PrivateRoute>
+            <ActualizarTeclado />
           </PrivateRoute>
         } />
 
@@ -88,7 +103,13 @@ const AppContent = () => {
         <Route path="/tecladosMecanicos" element={<TecladosMecanicos />} />
         <Route path="/tecladosCustom" element={<TecladosCustom />} />
         <Route path="/recuperar-password/:token" element={<Restablecer />} />
+        <Route path="/detalle/:id" element={<Detalle />} />
         <Route path="*" element={<NotFound />} />
+        <Route path="/crear" element={
+          <PrivateRoute>
+            <Crear />
+          </PrivateRoute>
+        } /> {/* Añadida la nueva ruta privada para Crear */}
       </Routes>
 
       {/* Mostrar Footer solo si no estamos en rutas de login, register, etc. */}
@@ -101,7 +122,11 @@ const AppWrapper = () => {
   return (
     <Router>
       <AuthProvider>
-        <AppContent />
+        <PerifericosProvider>
+          <ErrorBoundary>
+            <AppContent />
+          </ErrorBoundary>
+        </PerifericosProvider>
       </AuthProvider>
     </Router>
   );

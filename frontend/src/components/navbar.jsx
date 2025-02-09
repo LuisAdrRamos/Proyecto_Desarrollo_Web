@@ -1,18 +1,10 @@
-import React, { useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React from 'react';
+import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faKeyboard, faUser, faRightToBracket } from '@fortawesome/free-solid-svg-icons';
+import { faKeyboard, faUser, faRightToBracket, faPlus } from '@fortawesome/free-solid-svg-icons';
 
 const NavBar = () => {
-  const navigate = useNavigate();
   const autenticado = localStorage.getItem('token');
-  
-  // Si el usuario no está autenticado y hace clic en el perfil, redirige al login
-  useEffect(() => {
-    if (!autenticado) {
-      navigate('/');
-    }
-  }, [autenticado, navigate]);
 
   return (
     <nav className="navbar navbar-expand-lg" style={{ background: "#f8f9fa", boxShadow: "1 -2px 5px rgba(0, 0, 0, 0)" }}>
@@ -36,6 +28,13 @@ const NavBar = () => {
           <li className="nav-item">
             <Link className='nav-link' to='/tecladosCustom'>Teclados Custom</Link>
           </li>
+          {autenticado && (
+            <li className="nav-item">
+              <Link className='nav-link' to='/crear'>
+                <FontAwesomeIcon icon={faPlus} className="navbar-icon" /> Crear Periférico
+              </Link>
+            </li>
+          )}
         </ul>
         <div className="icons">
           {autenticado ? (

@@ -5,7 +5,7 @@ export const PrivateRoute = ({ children }) => {
   
   // Si no está autenticado, redirige a la página de login
   if (!autenticado) {
-    return <Navigate to='/login' />;
+    return <Navigate to='/' />;
   }
   
   return children;

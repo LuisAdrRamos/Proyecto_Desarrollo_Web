@@ -1,73 +1,63 @@
-import React, { useState, useContext, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import PerifericosContext from '../context/PerifericosProvider';
-import Mensaje from "../components/MensajeLogin";
+import { useState } from "react";
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import Mensaje from "./MensajeLogin";
+import '../styles/Formulario.css';
 import { FileUploaderRegular } from '@uploadcare/react-uploader';
 import '@uploadcare/react-uploader/core.css';
 
-const ActualizarTeclado = () => {
-    const { id } = useParams();
-    const { actualizarPeriferico, detallePeriferico } = useContext(PerifericosContext);
-    const [form, setForm] = useState({
-        nombre: '',
-        descripcion: '',
-        switchs: '',
-        calidad: '',
-        categoria: '',
-        precio: '',
-        especificaciones: '',
-        marca: '',
-        imagen: '' // Añadir un campo para la URL de la imagen
-    });
-    const [mensaje, setMensaje] = useState({});
-    const navigate = useNavigate();
+export const Formulario = () => {
 
-    useEffect(() => {
-        const cargarDatos = async () => {
-            try {
-                const datos = await detallePeriferico(id);
-                setForm(datos);
-            } catch (error) {
-                console.error('Error al cargar los datos del periférico:', error);
-            }
-        };
-        cargarDatos();
-    }, [id, detallePeriferico]);
+    const navigate = useNavigate();
+    const [mensaje, setMensaje] = useState({});
+    const [form, setForm] = useState({
+        nombre: "",
+        descripcion: "",
+        switchs: "",
+        calidad: "",
+        categoria: "",
+        precio: 0,
+        especificaciones: "",
+        marca: "",
+        imagen: "", // Campo para la URL de la imagen
+    });
 
     const handleChange = (e) => {
-        const { name, value } = e.target;
-        var newValue = value;
-
-        if (name === 'precio') {
-            newValue = value.replace(".", ",");
-        }
-
-        setForm({
-            ...form,
-            [name]: newValue
-        });
-    };
+        setForm({ ...form, [e.target.name]: e.target.value });
+    }
 
     const handleUploadComplete = (fileInfo) => {
-        setForm({
-            ...form,
-            imagen: fileInfo.cdnUrl // Guardar la URL de la imagen
-        });
+        if (fileInfo?.cdnUrl) {
+            console.log("URL de la imagen subida:", fileInfo.cdnUrl);
+            setForm((prevForm) => ({ ...prevForm, imagen: fileInfo.cdnUrl }));
+        } else {
+            console.error("No se pudo obtener la URL de la imagen");
+        }
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        console.log("Formulario antes de envio: ", form);
+
         try {
-            const respuesta = await actualizarPeriferico(id, form);
-            setMensaje({ tipo: 'success', respuesta: 'Periférico actualizado correctamente' });
-            setTimeout(() => {
-                navigate("/"); // Redirigir a la página de inicio después de 3 segundos
-                navigate(0);
-            }, 3000);
+            const token = localStorage.getItem('token');
+            const url = `${import.meta.env.VITE_BACKEND_URL}/periferico/registro`;
+            const options = {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`
+                }
+            };
+            console.log("Datos enviados al servidor:", form);
+            await axios.post(url, form, options);
+            setMensaje({ respuesta: "Periférico registrado con éxito", tipo: 'success' });
+
+
         } catch (error) {
-            setMensaje({ tipo: 'error', respuesta: 'Error al actualizar el periférico' });
+            console.log("Error del servidor:", error.response.data);
+            setMensaje({ respuesta: error.response.data.msg, tipo: 'error' });
         }
-    };
+    }
 
     return (
         <form className='profile-wrapper' onSubmit={handleSubmit}>
@@ -178,18 +168,19 @@ const ActualizarTeclado = () => {
                 <FileUploaderRegular
                     sourceList="local, camera, facebook, gdrive"
                     cameraModes="video, photo"
-                    classNameUploader="uc-light uc-green"
                     pubkey="974895bc0a16e513c3b3"
-                    onFileSelect={(file) => file.done && file.done(handleUploadComplete)} // Asegurar que file.done sea llamado solo si existe
+                    onFileSelect={(file) => {
+                        console.log("Archivo seleccionado:", file);
+                        file.done && file.done(handleUploadComplete);
+                    }}
                 />
+
             </div>
             <input
                 type="submit"
                 className='profile-button btn-success'
-                value='Actualizar'
+                value='Registrar'
             />
         </form>
     );
-};
-
-export default ActualizarTeclado;
+}
