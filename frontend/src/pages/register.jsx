@@ -13,6 +13,7 @@ const Register = () => {
     apellido: "",
     email: "",
     password: ""
+    // celular: ""
   });
 
   const [mensaje, setMensaje] = useState({ respuesta: '', tipo: '' });
@@ -29,7 +30,7 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const url = `${import.meta.env.VITE_BACKEND_URL}/admin/registro`;
+      const url = `${import.meta.env.VITE_BACKEND_URL}/usuario/registro`;
       const respuesta = await axios.post(url, form);
 
       if (respuesta && respuesta.data) {
@@ -37,12 +38,13 @@ const Register = () => {
         setTimeout(() => {
           setMensaje({ respuesta: '', tipo: '' });
           navigate('/login');
-        }, 5000);
+        }, 3000);
         setForm({
           nombre: "",
           apellido: "",
           email: "",
           password: ""
+          // celular: ""
         });
       } else {
         setMensaje({ respuesta: 'Algo salió mal', tipo: 'error' });
@@ -53,7 +55,6 @@ const Register = () => {
       setMensaje({ respuesta: errorMsg, tipo: 'error' });
     }
   };
-
 
   return (
     <div className='login-body'>
@@ -110,6 +111,17 @@ const Register = () => {
               onChange={handleChange}
             />
           </div>
+          {/* <div className="form-group">
+            <label htmlFor="celular">Celular:</label>
+            <input
+              type="text"
+              className="form-control"
+              id="celular"
+              name="celular"
+              value={form.celular}
+              onChange={handleChange}
+            />
+          </div> */}
           <button type="submit" className="btn btn-primary">Registrarse</button>
           <p className="text-center mt-3">
             ¿Ya tienes una cuenta?{' '}

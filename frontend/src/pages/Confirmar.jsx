@@ -13,14 +13,11 @@ export const Confirmar = () => {
   useEffect(() => {
     const verificarToken = async () => {
       try {
-        const url = `${import.meta.env.VITE_BACKEND_URL}/confirmar/${token}`;
+        const url = `${import.meta.env.VITE_BACKEND_URL}/usuario/confirmar/${token}`;
         const respuesta = await axios.get(url);
         setMensaje({ respuesta: respuesta.data.msg, tipo: 'success' });
       } catch (error) {
-        const errorMsg = error.response && error.response.data 
-          ? error.response.data.msg 
-          : 'Error al confirmar la cuenta';
-        setMensaje({ respuesta: errorMsg, tipo: 'error' });
+        setMensaje({ respuesta: error.response?.data?.msg || "Error al confirmar cuenta", tipo: 'error' });
       }
     };
     verificarToken();
@@ -35,7 +32,7 @@ export const Confirmar = () => {
         </div>
       </Link>
       <div className="login-wrapper">
-        <h2 className="text-center mb-4">Confirmar Cuenta</h2>
+        <h2 className="text-center mb-4">Confirmación de Cuenta</h2>
         {mensaje.respuesta && (
           <Mensaje tipo={mensaje.tipo}>
             {mensaje.respuesta}
@@ -44,8 +41,8 @@ export const Confirmar = () => {
         <div className="confirmar-circle">
           <FontAwesomeIcon icon={faCheck} className="confirmar-icon" />
         </div>
-        <p className="text-center confirmar-texto-gracias">Muchas Gracias</p>
-        <p className="text-center confirmar-texto-iniciar">Ya puedes iniciar sesión</p>
+        <p className="text-center confirmar-texto-gracias">¡Gracias por confirmar tu cuenta!</p>
+        <p className="text-center confirmar-texto-iniciar">Ahora puedes iniciar sesión.</p>
         <Link to="/login" className="confirmar-link">Iniciar Sesión</Link>
       </div>
     </div>

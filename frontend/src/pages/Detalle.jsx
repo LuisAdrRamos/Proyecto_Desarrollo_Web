@@ -10,16 +10,12 @@ const Detalle = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { detallePeriferico, eliminarPeriferico } = useContext(PerifericosContext);
+
   const [periferico, setPeriferico] = useState({});
   const [mensaje, setMensaje] = useState({});
-  const autenticado = localStorage.getItem('token'); // Verificamos si el usuario está autenticado
 
-  const formatearPrecio = (precio) => {
-    return new Intl.NumberFormat("es-EC", {
-      style: "currency",
-      currency: "USD",
-    }).format(precio);
-  };
+  const autenticado = localStorage.getItem("token");
+  const rol = localStorage.getItem("tipoUsuario");
 
   useEffect(() => {
     const cargarPeriferico = async () => {
@@ -36,40 +32,24 @@ const Detalle = () => {
     cargarPeriferico();
   }, [id, detallePeriferico]);
 
-  const handleAddToCart = () => {
-    // Lógica para añadir al carrito
-    console.log("Añadido al carrito");
-  };
+  // 🔹 Asegurar que la imagen se muestra correctamente
+  const imagenUrl = periferico.imagen?.startsWith("http")
+    ? periferico.imagen
+    : "https://via.placeholder.com/400x300?text=Imagen+No+Disponible";
 
-  const handleUpdate = () => {
-    navigate(`/actualizar/${id}`);
-  };
-
-  const handleDelete = async () => {
-    if (window.confirm("¿Estás seguro de que quieres eliminar este producto?")) {
-      try {
-        await eliminarPeriferico(id);
-        alert("Producto eliminado con éxito");
-        navigate('/'); // Redirigir a la página principal después de eliminar
-      } catch (error) {
-        alert("Error al eliminar el producto");
-        console.error(error);
-      }
-    }
+  // ✅ Función corregida para formatear el precio
+  const formatearPrecio = (precio) => {
+    return new Intl.NumberFormat("es-EC", { style: "currency", currency: "USD", }).format(precio);
   };
 
   return (
     <div className="detalle-container">
       <h1 className="detalle-title">Detalle del Periférico</h1>
       <hr className="detalle-separator" />
-
       {Object.keys(periferico).length !== 0 ? (
         <div className="detalle-content">
           <div className="detalle-imagen">
-            <img
-              src={periferico.imgSrc}
-              alt="Periférico"
-            />
+            <img src={imagenUrl} alt="Periférico" />
           </div>
           <div className="detalle-info">
             <p><span>Nombre:</span> {periferico.nombre}</p>
@@ -81,22 +61,30 @@ const Detalle = () => {
             <p><span>Especificaciones:</span> {periferico.especificaciones}</p>
             <p><span>Marca:</span> {periferico.marca}</p>
           </div>
+
           <div className="detalle-buttons mt-3 d-flex justify-content-between">
-            <button className="btn btn-primary me-2 effect-button" onClick={handleAddToCart}>
+            <button className="btn btn-primary me-2 effect-button">
               Añadir al VS
             </button>
-            {autenticado && (
+
+            {autenticado && rol === "admin" && (
               <div className="admin-buttons d-flex justify-content-between">
                 <button
                   className="btn btn-warning me-2 effect-button"
-                  onClick={handleUpdate}
+                  onClick={() => navigate(`/actualizar/${id}`)}
                   title="Actualizar producto"
                 >
                   <FontAwesomeIcon icon={faPenToSquare} />
                 </button>
                 <button
                   className="btn btn-danger effect-button"
-                  onClick={handleDelete}
+                  onClick={async () => {
+                    if (window.confirm("¿Estás seguro de que quieres eliminar este producto?")) {
+                      await eliminarPeriferico(id);
+                      alert("Producto eliminado con éxito");
+                      navigate('/');
+                    }
+                  }}
                   title="Eliminar producto"
                 >
                   <FontAwesomeIcon icon={faTrash} />
@@ -106,9 +94,7 @@ const Detalle = () => {
           </div>
         </div>
       ) : (
-        Object.keys(mensaje).length > 0 && (
-          <Mensaje tipo={mensaje.tipo}>{mensaje.respuesta}</Mensaje>
-        )
+        Object.keys(mensaje).length > 0 && <Mensaje tipo={mensaje.tipo}>{mensaje.respuesta}</Mensaje>
       )}
     </div>
   );

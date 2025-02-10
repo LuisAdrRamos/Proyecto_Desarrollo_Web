@@ -6,7 +6,6 @@ const TecladosOficina = () => {
   const { perifericos, filtrarPerifericosPorCategoria } = useContext(PerifericosContext);
   const [tecladosOficina, setTecladosOficina] = useState([]);
 
-  // Filtrar periféricos por categoría "Oficina" al cargar el componente
   useEffect(() => {
     const tecladosFiltrados = filtrarPerifericosPorCategoria("Oficina");
     setTecladosOficina(tecladosFiltrados);
@@ -21,9 +20,9 @@ const TecladosOficina = () => {
             <div className="row">
               {tecladosOficina.map((teclado) => (
                 <CardP
-                  key={teclado._id?.$oid || teclado._id} // Compatibilidad para varios formatos de ID
-                  id={teclado._id?.$oid || teclado._id} // Asegurar el paso del id correcto
-                    imgSrc={teclado.imgSrc}
+                  key={teclado._id?.$oid || teclado._id}
+                  id={teclado._id?.$oid || teclado._id}
+                  imgSrc={teclado.imagen} // ✅ Corrección aquí
                   title={teclado.nombre}
                   text={teclado.descripcion}
                   price={teclado.precio}
@@ -37,4 +36,4 @@ const TecladosOficina = () => {
   );
 };
 
-export default TecladosOficina; // Exportación por defecto
+export default TecladosOficina;

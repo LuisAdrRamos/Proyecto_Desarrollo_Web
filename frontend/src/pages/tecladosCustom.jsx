@@ -6,7 +6,7 @@ const TecladosOficina = () => {
   const { perifericos, filtrarPerifericosPorCategoria } = useContext(PerifericosContext);
   const [tecladosOficina, setTecladosOficina] = useState([]);
 
-  // Filtrar periféricos por categoría "Oficina" al cargar el componente
+  // Filtrar periféricos por categoría "Custom" al cargar el componente
   useEffect(() => {
     const tecladosFiltrados = filtrarPerifericosPorCategoria("Custom");
     setTecladosOficina(tecladosFiltrados);
@@ -23,7 +23,7 @@ const TecladosOficina = () => {
                 <CardP
                   key={teclado._id?.$oid || teclado._id} // Compatibilidad para varios formatos de ID
                   id={teclado._id?.$oid || teclado._id}
-                  imgSrc={teclado.imgSrc}
+                  imgSrc={teclado.imagen} // 🔹 Pasamos la URL de Cloudinary
                   title={teclado.nombre}
                   text={teclado.descripcion}
                   price={teclado.precio}
@@ -37,4 +37,4 @@ const TecladosOficina = () => {
   );
 };
 
-export default TecladosOficina; // Exportación por defecto
+export default TecladosOficina;

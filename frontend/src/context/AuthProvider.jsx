@@ -6,84 +6,100 @@ const AuthContext = createContext();
 const AuthProvider = ({ children }) => {
   const [auth, setAuth] = useState({});
 
-  // Función para obtener el perfil del administrador
-  const obtenerPerfilAdmin = async (token) => {
+  // Función para obtener el perfil del usuario o admin
+  const obtenerPerfil = async (token) => {
     try {
-      const url = `${import.meta.env.VITE_BACKEND_URL}/admin/perfil`;
+      const urlBase = import.meta.env.VITE_BACKEND_URL;
+      const tipoUsuario = localStorage.getItem("tipoUsuario");
+      if (!tipoUsuario) throw new Error("Tipo de usuario no definido");
+
+      const url = tipoUsuario === "admin"
+        ? `${urlBase}/admin/perfil`
+        : `${urlBase}/usuario/perfil/${auth.usuario?._id}`;
+
       const options = {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
       };
+
       const respuesta = await axios.get(url, options);
-      setAuth((prevAuth) => {
-        if (JSON.stringify(prevAuth) !== JSON.stringify(respuesta.data)) {
-          return respuesta.data; // Solo actualiza si los datos son diferentes
-        }
-        return prevAuth;
+      setAuth({
+        usuario: respuesta.data,
+        rol: tipoUsuario,
       });
-      return respuesta.data; // Retornar los datos del perfil
+
+      return respuesta.data;
     } catch (error) {
-      console.error("Error al obtener el perfil:", error);
-      throw error; // Lanzar el error para manejarlo en el componente
+      console.error("❌ Error al obtener el perfil:", error);
+      throw error;
     }
   };
 
-  // Función para actualizar el perfil del administrador
-  const actualizarPerfilAdmin = async (id, datos) => {
+  // 🔹 Función para actualizar el perfil (Admin o Usuario)
+  const actualizarPerfil = async (id, datos) => {
     try {
       const token = localStorage.getItem("token");
-      const url = `${import.meta.env.VITE_BACKEND_URL}/admin/actualizar/${id}`;
+      const tipoUsuario = localStorage.getItem("tipoUsuario");
+      const url = tipoUsuario === "admin"
+        ? `${import.meta.env.VITE_BACKEND_URL}/admin/actualizar/${id}`
+        : `${import.meta.env.VITE_BACKEND_URL}/usuario/actualizar/${id}`;
+
       const options = {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
       };
+
       const respuesta = await axios.put(url, datos, options);
-      setAuth(respuesta.data); // Actualizar el estado del perfil
-      return respuesta.data; // Retornar los datos actualizados
+      setAuth(respuesta.data);
+      return respuesta.data;
     } catch (error) {
-      console.error("Error al actualizar el perfil:", error);
-      throw error; // Lanzar el error para manejarlo en el componente
+      console.error("❌ Error al actualizar el perfil:", error);
+      throw error;
     }
   };
 
-  // Función para actualizar la contraseña del administrador
+  // 🔹 Función para actualizar la contraseña (Admin o Usuario)
   const actualizarPassword = async (datos) => {
     try {
       const token = localStorage.getItem("token");
-      const url = `${import.meta.env.VITE_BACKEND_URL}/admin/actualizar-password`;
+      const tipoUsuario = localStorage.getItem("tipoUsuario");
+      const url = tipoUsuario === "admin"
+        ? `${import.meta.env.VITE_BACKEND_URL}/admin/actualizar-password`
+        : `${import.meta.env.VITE_BACKEND_URL}/usuario/actualizar-password`;
+
       const options = {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
       };
+
       const respuesta = await axios.put(url, datos, options);
-      return respuesta.data; // Retornar la respuesta del servidor
+      return respuesta.data;
     } catch (error) {
-      console.error("Error al actualizar la contraseña:", error);
-      throw error; // Lanzar el error para manejarlo en el componente
+      console.error("❌ Error al actualizar la contraseña:", error);
+      throw error;
     }
   };
 
-  // Cargar el perfil al iniciar
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
-      obtenerPerfilAdmin(token);
+      obtenerPerfil(token);
     }
-  }, []); // Solo se ejecuta una vez al montar el componente
+  }, []);
 
   return (
     <AuthContext.Provider
       value={{
         auth,
         setAuth,
-        obtenerPerfilAdmin,
-        actualizarPerfilAdmin,
+        obtenerPerfil,
+        actualizarPerfil,
         actualizarPassword,
       }}
     >

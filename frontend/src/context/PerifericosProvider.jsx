@@ -14,17 +14,18 @@ const PerifericosProvider = ({ children }) => {
             const options = {
                 headers: {
                     "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`,
+                    ...(token && { Authorization: `Bearer ${token}` })
                 },
             };
+    
             const respuesta = await axios.get(url, options);
-            console.log("Datos del backend", respuesta.data);
+            console.log("✅ Datos del backend:", respuesta.data);
             
-            setPerifericos(respuesta.data); // Actualizar el estado con los periféricos obtenidos
-            return respuesta.data; // Retornar los datos de los periféricos
+            setPerifericos(respuesta.data); 
+            return respuesta.data; 
         } catch (error) {
             console.error("Error al listar los periféricos:", error);
-            throw error; // Lanzar el error para manejarlo en el componente
+            setTimeout(() => listarPerifericos(), 5000); // 🔹 Reintentar después de 5 segundos
         }
     };
 
@@ -92,11 +93,8 @@ const PerifericosProvider = ({ children }) => {
 
     // Cargar los periféricos al iniciar
     useEffect(() => {
-        const token = localStorage.getItem("token");
-        if (token) {
-            listarPerifericos();
-        }
-    }, []); // Solo se ejecuta una vez al montar el componente
+        listarPerifericos(); // Se ejecuta sin depender del token
+    }, []);  // Solo se ejecuta una vez al montar el componente
 
     return (
         <PerifericosContext.Provider

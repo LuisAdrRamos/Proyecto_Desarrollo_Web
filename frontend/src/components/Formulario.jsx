@@ -1,15 +1,13 @@
 import { useState } from "react";
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import Mensaje from "./MensajeLogin";
-import '../styles/Formulario.css';
-import { FileUploaderRegular } from '@uploadcare/react-uploader';
-import '@uploadcare/react-uploader/core.css';
+import "../styles/Formulario.css";
 
 export const Formulario = () => {
-
     const navigate = useNavigate();
     const [mensaje, setMensaje] = useState({});
+    const [imagen, setImagen] = useState(null); // 🔹 Guardar la imagen seleccionada
     const [form, setForm] = useState({
         nombre: "",
         descripcion: "",
@@ -19,91 +17,114 @@ export const Formulario = () => {
         precio: 0,
         especificaciones: "",
         marca: "",
-        imagen: "", // Campo para la URL de la imagen
     });
 
     const handleChange = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value });
-    }
+    };
 
-    const handleUploadComplete = (fileInfo) => {
-        if (fileInfo?.cdnUrl) {
-            console.log("URL de la imagen subida:", fileInfo.cdnUrl);
-            setForm((prevForm) => ({ ...prevForm, imagen: fileInfo.cdnUrl }));
-        } else {
-            console.error("No se pudo obtener la URL de la imagen");
-        }
+    // 🔹 Capturar la imagen seleccionada
+    const handleFileChange = (e) => {
+        setImagen(e.target.files[0]); // Guardar el archivo en el estado
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("Formulario antes de envio: ", form);
+
+        console.log("📤 Estado actual del formulario antes de enviar:", form);
+
+        if (!imagen) {
+            console.error("⚠️ No se ha seleccionado una imagen.");
+            setMensaje({ respuesta: "Debes subir una imagen antes de registrar", tipo: "error" });
+            return;
+        }
 
         try {
-            const token = localStorage.getItem('token');
+            const token = localStorage.getItem("token");
             const url = `${import.meta.env.VITE_BACKEND_URL}/periferico/registro`;
+            
+            // Crear FormData para enviar archivos
+            const formData = new FormData();
+            formData.append("nombre", form.nombre);
+            formData.append("descripcion", form.descripcion);
+            formData.append("switchs", form.switchs);
+            formData.append("calidad", form.calidad);
+            formData.append("categoria", form.categoria);
+            formData.append("precio", form.precio);
+            formData.append("especificaciones", form.especificaciones);
+            formData.append("marca", form.marca);
+            formData.append("imagen", imagen); // Agregar la imagen
+
             const options = {
                 headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${token}`
-                }
+                    "Content-Type": "multipart/form-data",
+                    Authorization: `Bearer ${token}`,
+                },
             };
-            console.log("Datos enviados al servidor:", form);
-            await axios.post(url, form, options);
-            setMensaje({ respuesta: "Periférico registrado con éxito", tipo: 'success' });
 
+            console.log("📤 Enviando datos al servidor:", formData);
+            await axios.post(url, formData, options);
 
+            setMensaje({ respuesta: "Periférico registrado con éxito", tipo: "success" });
+
+            setTimeout(() => {
+                navigate("/");
+            }, 2000);
         } catch (error) {
-            console.log("Error del servidor:", error.response.data);
-            setMensaje({ respuesta: error.response.data.msg, tipo: 'error' });
+            console.error("❌ Error del servidor:", error.response?.data || error);
+            setMensaje({ respuesta: error.response?.data?.msg || "Error al registrar", tipo: "error" });
         }
-    }
+    };
 
     return (
-        <form className='profile-wrapper' onSubmit={handleSubmit}>
+        <form className="profile-wrapper" onSubmit={handleSubmit}>
             {Object.keys(mensaje).length > 0 && <Mensaje tipo={mensaje.tipo}>{mensaje.respuesta}</Mensaje>}
+            
             <div>
-                <label htmlFor='nombre' className='form-label'>Nombre: </label>
+                <label htmlFor="nombre" className="form-label">Nombre: </label>
                 <input
-                    id='nombre'
+                    id="nombre"
                     type="text"
-                    className='profile-input'
-                    placeholder='Nombre del periférico'
-                    name='nombre'
+                    className="profile-input"
+                    placeholder="Nombre del periférico"
+                    name="nombre"
                     onChange={handleChange}
                     value={form.nombre}
                 />
             </div>
+
             <div>
-                <label htmlFor='descripcion' className='form-label'>Descripción: </label>
+                <label htmlFor="descripcion" className="form-label">Descripción: </label>
                 <input
-                    id='descripcion'
+                    id="descripcion"
                     type="text"
-                    className='profile-input'
-                    placeholder='Descripción del periférico'
-                    name='descripcion'
+                    className="profile-input"
+                    placeholder="Descripción del periférico"
+                    name="descripcion"
                     onChange={handleChange}
                     value={form.descripcion}
                 />
             </div>
+
             <div>
-                <label htmlFor='switchs' className='form-label'>Switches: </label>
+                <label htmlFor="switchs" className="form-label">Switches: </label>
                 <input
-                    id='switchs'
+                    id="switchs"
                     type="text"
-                    className='profile-input'
-                    placeholder='Tipo de switches'
-                    name='switchs'
+                    className="profile-input"
+                    placeholder="Tipo de switches"
+                    name="switchs"
                     onChange={handleChange}
                     value={form.switchs}
                 />
             </div>
+
             <div>
-                <label htmlFor='calidad' className='form-label'>Calidad: </label>
+                <label htmlFor="calidad" className="form-label">Calidad: </label>
                 <select
-                    id='calidad'
-                    className='profile-input'
-                    name='calidad'
+                    id="calidad"
+                    className="profile-input"
+                    name="calidad"
                     onChange={handleChange}
                     value={form.calidad}
                 >
@@ -113,12 +134,13 @@ export const Formulario = () => {
                     <option value="Alta">Alta</option>
                 </select>
             </div>
+
             <div>
-                <label htmlFor='categoria' className='form-label'>Categoría: </label>
+                <label htmlFor="categoria" className="form-label">Categoría: </label>
                 <select
-                    id='categoria'
-                    className='profile-input'
-                    name='categoria'
+                    id="categoria"
+                    className="profile-input"
+                    name="categoria"
                     onChange={handleChange}
                     value={form.categoria}
                 >
@@ -128,59 +150,55 @@ export const Formulario = () => {
                     <option value="Custom">Custom</option>
                 </select>
             </div>
+
             <div>
-                <label htmlFor='precio' className='form-label'>Precio: </label>
+                <label htmlFor="precio" className="form-label">Precio: </label>
                 <input
-                    id='precio'
+                    id="precio"
                     type="number"
-                    className='profile-input'
-                    placeholder='Precio del periférico'
-                    name='precio'
+                    className="profile-input"
+                    placeholder="Precio del periférico"
+                    name="precio"
                     onChange={handleChange}
                     value={form.precio}
                 />
             </div>
+
             <div>
-                <label htmlFor='especificaciones' className='form-label'>Especificaciones: </label>
+                <label htmlFor="especificaciones" className="form-label">Especificaciones: </label>
                 <textarea
-                    id='especificaciones'
-                    className='profile-input'
-                    placeholder='Especificaciones del periférico'
-                    name='especificaciones'
+                    id="especificaciones"
+                    className="profile-input"
+                    placeholder="Especificaciones del periférico"
+                    name="especificaciones"
                     onChange={handleChange}
                     value={form.especificaciones}
                 />
             </div>
+
             <div>
-                <label htmlFor='marca' className='form-label'>Marca: </label>
+                <label htmlFor="marca" className="form-label">Marca: </label>
                 <input
-                    id='marca'
+                    id="marca"
                     type="text"
-                    className='profile-input'
-                    placeholder='Marca del periférico'
-                    name='marca'
+                    className="profile-input"
+                    placeholder="Marca del periférico"
+                    name="marca"
                     onChange={handleChange}
                     value={form.marca}
                 />
             </div>
-            <div>
-                <label htmlFor='imagen' className='form-label'>Subir una imagen: </label>
-                <FileUploaderRegular
-                    sourceList="local, camera, facebook, gdrive"
-                    cameraModes="video, photo"
-                    pubkey="974895bc0a16e513c3b3"
-                    onFileSelect={(file) => {
-                        console.log("Archivo seleccionado:", file);
-                        file.done && file.done(handleUploadComplete);
-                    }}
-                />
 
+            <div>
+                <label htmlFor="imagen" className="form-label">Subir una imagen: </label>
+                <input type="file" name="imagen" accept="image/*" onChange={handleFileChange} className="profile-input" />
             </div>
+
             <input
                 type="submit"
-                className='profile-button btn-success'
-                value='Registrar'
+                className="profile-button btn-success"
+                value="Registrar"
             />
         </form>
     );
-}
+};

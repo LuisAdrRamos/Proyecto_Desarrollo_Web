@@ -5,7 +5,7 @@ import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faKeyboard } from '@fortawesome/free-solid-svg-icons';
 import 'react-toastify/dist/ReactToastify.css';
-import '../styles/login.css'; // Archivo de estilos combinado
+import '../styles/login.css'; 
 
 const Restablecer = () => {
     const { token } = useParams();
@@ -19,16 +19,16 @@ const Restablecer = () => {
     const handleChange = (e) => {
         setForm({
             ...form,
-            [e.target.name]: e.target.value
+            [e.target.name]: e.target.value || "" // Previene valores undefined
         });
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const url = `${import.meta.env.VITE_BACKEND_URL}/admin/nuevo-password/${token}`;
+            const url = `${import.meta.env.VITE_BACKEND_URL}/usuario/nuevo-password/${token}`;
             const respuesta = await axios.post(url, form);
-            setForm({});
+            setForm({ password: "", confirmpassword: "" }); // Resetea correctamente el estado
             toast.success(respuesta.data.msg);
             setTimeout(() => {
                 navigate('/login');
@@ -38,20 +38,19 @@ const Restablecer = () => {
         }
     };
 
-    const verifyToken = async () => {
-        try {
-            const url = `${import.meta.env.VITE_BACKEND_URL}/admin/recuperar-password/${token}`;
-            const respuesta = await axios.get(url);
-            setTokenBack(true);
-            toast.success(respuesta.data.msg);
-        } catch (error) {
-            toast.error(error.response.data.msg);
-        }
-    };
-
     useEffect(() => {
+        const verifyToken = async () => {
+            try {
+                const url = `${import.meta.env.VITE_BACKEND_URL}/usuario/recuperar-password/${token}`;
+                const respuesta = await axios.get(url);
+                setTokenBack(true);
+                toast.success(respuesta.data.msg);
+            } catch (error) {
+                toast.error(error.response.data.msg);
+            }
+        };
         verifyToken();
-    }, []);
+    }, [token]);
 
     return (
         <div className='login-body'>
@@ -63,8 +62,12 @@ const Restablecer = () => {
             </Link>
             <div className="login-wrapper">
                 <ToastContainer />
-                <h1 className="text-center mb-4 text-3xl font-semibold uppercase text-gray-500">Bienvenido Otra Vez</h1>
-                <small className="text-center text-gray-400 my-4 block text-sm">Por favor ingresa los detalles</small>
+                <h1 className="text-center mb-4 text-3xl font-semibold uppercase text-gray-500">
+                    Bienvenido Otra Vez
+                </h1>
+                <small className="text-center text-gray-400 my-4 block text-sm">
+                    Por favor ingresa los detalles
+                </small>
                 {tokenback &&
                     <form className='w-full' onSubmit={handleSubmit}>
                         <div className="login-form-group">
@@ -74,7 +77,7 @@ const Restablecer = () => {
                                 placeholder="Enter your password"
                                 className="form-control"
                                 name='password'
-                                value={form.password || ""}
+                                value={form.password} // Siempre tiene un valor
                                 onChange={handleChange}
                             />
                             <label className="mb-2 block text-sm font-semibold">Confirm Password</label>
@@ -83,12 +86,12 @@ const Restablecer = () => {
                                 placeholder="Repeat your password"
                                 className="form-control"
                                 name='confirmpassword'
-                                value={form.confirmpassword || ""}
+                                value={form.confirmpassword} // Siempre tiene un valor
                                 onChange={handleChange}
                             />
                         </div>
                         <div className="mb-3">
-                            <button className="btn btn-primary">Send</button>
+                            <button className="btn btn-primary">Enviar</button>
                         </div>
                     </form>
                 }

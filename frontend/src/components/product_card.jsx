@@ -1,13 +1,19 @@
 import React, { useContext } from "react";
+import { useNavigate } from "react-router-dom"; // 🔹 Falta esta importación
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPenToSquare, faTrash, faCircleInfo } from "@fortawesome/free-solid-svg-icons";
 import PerifericosContext from "../context/PerifericosProvider";
-import { useNavigate } from "react-router-dom";
 
 const CardP = ({ id, imgSrc, title, text, price, handleAddToCart }) => {
   const { eliminarPeriferico } = useContext(PerifericosContext);
   const autenticado = localStorage.getItem("token");
+  const rol = localStorage.getItem("tipoUsuario");
   const navigate = useNavigate();
+
+  // Si imgSrc es un public_id en vez de una URL, construimos la URL
+  const cloudinaryUrl = imgSrc.startsWith("http")
+    ? imgSrc
+    : `https://res.cloudinary.com/dcwjfepjo/image/upload/${imgSrc}`;
 
   const handleDelete = async () => {
     if (window.confirm("¿Estás seguro de que quieres eliminar este producto?")) {
@@ -31,17 +37,16 @@ const CardP = ({ id, imgSrc, title, text, price, handleAddToCart }) => {
   };
 
   const handleCardClick = (e) => {
-    // Prevenir que el click en los botones internos también dispare la navegación
-    if (!e.target.closest('.btn')) {
+    if (!e.target.closest(".btn")) {
       navigate(`/detalle/${id}`);
     }
   };
 
   return (
     <div className="col-md-4 d-flex align-items-stretch">
-      <div className="card d-flex flex-column" onClick={handleCardClick} style={{ cursor: 'pointer' }}>
+      <div className="card d-flex flex-column" onClick={handleCardClick} style={{ cursor: "pointer" }}>
         <img
-          src={imgSrc}
+          src={cloudinaryUrl || "https://via.placeholder.com/400x300?text=Imagen+No+Disponible"}
           className="custom-card-img-top"
           alt={title}
         />
@@ -53,27 +58,16 @@ const CardP = ({ id, imgSrc, title, text, price, handleAddToCart }) => {
             <button className="btn btn-primary me-2 effect-button" onClick={handleAddToCart}>
               Añadir al VS
             </button>
-            {autenticado && (
+
+            {autenticado && rol === "admin" && (
               <div className="admin-buttons mt-3 d-flex justify-content-between">
-                <button
-                  className="btn btn-info me-2 effect-button"
-                  onClick={handleViewDetails}
-                  title="Ver detalles"
-                >
+                <button className="btn btn-info me-2 effect-button" onClick={handleViewDetails} title="Ver detalles">
                   <FontAwesomeIcon icon={faCircleInfo} />
                 </button>
-                <button
-                  className="btn btn-warning me-2 effect-button"
-                  onClick={handleUpdate}
-                  title="Actualizar producto"
-                >
+                <button className="btn btn-warning me-2 effect-button" onClick={handleUpdate} title="Actualizar producto">
                   <FontAwesomeIcon icon={faPenToSquare} />
                 </button>
-                <button
-                  className="btn btn-danger effect-button"
-                  onClick={handleDelete}
-                  title="Eliminar producto"
-                >
+                <button className="btn btn-danger effect-button" onClick={handleDelete} title="Eliminar producto">
                   <FontAwesomeIcon icon={faTrash} />
                 </button>
               </div>

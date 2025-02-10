@@ -10,7 +10,8 @@ import { faKeyboard } from '@fortawesome/free-solid-svg-icons';
 const Login = () => {
   const [form, setForm] = useState({
     email: "",
-    password: ""
+    password: "",
+    tipoUsuario: "usuario" // Valor predeterminado
   });
 
   const [mensaje, setMensaje] = useState({});
@@ -25,35 +26,45 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
     try {
-      const url = `${import.meta.env.VITE_BACKEND_URL}/admin/login`;
+      const url = form.tipoUsuario === "admin"
+        ? `${import.meta.env.VITE_BACKEND_URL}/admin/login`
+        : `${import.meta.env.VITE_BACKEND_URL}/usuario/login`;
+
       const respuesta = await axios.post(url, form);
 
-      if (respuesta && respuesta.data) {
+      if (respuesta?.data) {
         setMensaje({ respuesta: respuesta.data.msg, tipo: true });
 
-        // Opcional: Guardar el token en el almacenamiento local o en cookies
         if (respuesta.data.token) {
           localStorage.setItem('token', respuesta.data.token);
+          localStorage.setItem('tipoUsuario', respuesta.data.rol); // Guardar el rol correctamente
+
+          console.log("Rol guardado en localStorage:", respuesta.data.rol); // Debug
+
+          // Redirigir según el rol
+          if (respuesta.data.rol === "admin") {
+            navigate('/');
+          } else if (respuesta.data.rol === "usuario") {
+            navigate('/');
+          } else {
+            setMensaje({ respuesta: "Rol desconocido", tipo: false });
+          }
         }
 
         setForm({
           email: "",
-          password: ""
+          password: "",
+          tipoUsuario: "usuario"
         });
-
-        // Redirige al usuario a la página principal (o a un dashboard)
-        navigate('/');
       } else {
         throw new Error('Respuesta inesperada del servidor');
       }
     } catch (error) {
-      const errorMsg = error.response && error.response.data ? error.response.data.msg : 'Error al iniciar sesión';
+      const errorMsg = error.response?.data?.msg || 'Error al iniciar sesión';
       setMensaje({ respuesta: errorMsg, tipo: false });
-      console.error('Error:', error.message, 'Tipo:', false);
-      if (error.response) {
-        console.error('Datos del error:', error.response.data);
-      }
+      console.error('Error:', error.message);
     }
   };
 
@@ -66,10 +77,10 @@ const Login = () => {
         </div>
       </Link>
       <div className="login-wrapper">
-        <h2 className="text-center mb-4">Iniciar Sesión</h2>
+        <h2 className="text-center mb-4">Iniciar sesión</h2>
         <form id="login-form" onSubmit={handleSubmit}>
           <div className="form-group">
-            <label htmlFor="email">Correo Electrónico:</label>
+            <label htmlFor="email">Correo electrónico:</label>
             <input
               type="email"
               className="form-control"
@@ -90,10 +101,18 @@ const Login = () => {
               onChange={handleChange}
             />
           </div>
+          <div className="form-group">
+            <label>Tipo de usuario:</label>
+            <select name="tipoUsuario" className="form-control" onChange={handleChange} value={form.tipoUsuario}>
+              <option value="usuario">Usuario</option>
+              <option value="admin">Administrador</option>
+            </select>
+          </div>
+
           <p className="forgot-password">
             <Link to="/forgot/id" className="forgot-link">¿Olvidaste tu contraseña?</Link>
           </p>
-          <button type="submit" className="btn btn-primary">Iniciar Sesión</button>
+          <button type="submit" className="btn btn-primary">Iniciar sesión</button>
           <p className="text-center mt-3">
             ¿No tienes una cuenta?{' '}
             <Link to="/register" className="register-link">Regístrate</Link>
@@ -106,7 +125,6 @@ const Login = () => {
         )}
       </div>
     </div>
-
   );
 };
 

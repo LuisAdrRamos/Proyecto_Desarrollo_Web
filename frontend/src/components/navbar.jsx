@@ -5,6 +5,7 @@ import { faKeyboard, faUser, faRightToBracket, faPlus } from '@fortawesome/free-
 
 const NavBar = () => {
   const autenticado = localStorage.getItem('token');
+  const rol = localStorage.getItem("tipoUsuario"); // 🔹 Obtener rol
 
   return (
     <nav className="navbar navbar-expand-lg" style={{ background: "#f8f9fa", boxShadow: "1 -2px 5px rgba(0, 0, 0, 0)" }}>
@@ -28,7 +29,9 @@ const NavBar = () => {
           <li className="nav-item">
             <Link className='nav-link' to='/tecladosCustom'>Teclados Custom</Link>
           </li>
-          {autenticado && (
+
+          {/* 🔹 Mostrar "Crear Periférico" solo si es admin */}
+          {autenticado && rol === "admin" && (
             <li className="nav-item">
               <Link className='nav-link' to='/crear'>
                 <FontAwesomeIcon icon={faPlus} className="navbar-icon" /> Crear Periférico

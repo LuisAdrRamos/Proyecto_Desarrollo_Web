@@ -45,7 +45,7 @@ const AppContent = () => {
       {!shouldHideHeaderFooter && <NavBar />}
 
       <Routes>
-        {/* Rutas públicas (login, registro, etc.) */}
+        {/* Rutas públicas */}
         <Route path='/login' element={<Auth />} >
           <Route path='/login' element={<Login />} />
         </Route>
@@ -54,20 +54,27 @@ const AppContent = () => {
           <Route path='/register' element={<Register />} />
         </Route>
 
-        {/* Rutas privadas que requieren autenticación */}
+        {/* Ruta protegida para todos los usuarios autenticados */}
         <Route path='/perfil' element={
-          <PrivateRoute>
+          <PrivateRoute allowedRoles={["admin", "usuario"]}>
             <Perfil />
           </PrivateRoute>
         } />
 
+        {/* 🔹 Rutas privadas accesibles solo para administradores */}
         <Route path='/actualizar/:id' element={
-          <PrivateRoute>
+          <PrivateRoute allowedRoles={["admin"]}>
             <ActualizarTeclado />
           </PrivateRoute>
         } />
 
-        {/* Ruta principal (página pública) */}
+        <Route path='/crear' element={
+          <PrivateRoute allowedRoles={["admin"]}>
+            <Crear />
+          </PrivateRoute>
+        } />
+
+        {/* Ruta principal pública */}
         <Route path="/" element={
           <div>
             <Carousel />
@@ -105,12 +112,8 @@ const AppContent = () => {
         <Route path="/recuperar-password/:token" element={<Restablecer />} />
         <Route path="/detalle/:id" element={<Detalle />} />
         <Route path="*" element={<NotFound />} />
-        <Route path="/crear" element={
-          <PrivateRoute>
-            <Crear />
-          </PrivateRoute>
-        } /> {/* Añadida la nueva ruta privada para Crear */}
       </Routes>
+
 
       {/* Mostrar Footer solo si no estamos en rutas de login, register, etc. */}
       {!shouldHideHeaderFooter && <Footer />}
